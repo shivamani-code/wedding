@@ -133,7 +133,7 @@ export function Events() {
             <span className="text-lg leading-none">‹</span>
           </button>
 
-          <div className="relative w-[420px] h-[540px] mx-8 sm:mx-12" style={{ perspective: '1200px' }}>
+          <div className="relative w-[min(90%,420px)] aspect-[3/4] md:w-[420px] md:h-[540px] md:aspect-auto mx-auto md:mx-8 sm:mx-12" style={{ perspective: '1200px' }}>
             <AnimatePresence initial={false} custom={{ dir }}>
               {stack.map(({ idx, ev, scale, y, opacity, zIndex }) => {
                 const isTop = zIndex === 40;
@@ -210,7 +210,7 @@ export function Events() {
             type="button"
             onClick={next}
             aria-label="Next event"
-            className="hidden sm:flex items-center justify-center w-10 h-10 rounded-full bg-[#F8F3EA] border border-[#C9A46C]/60 shadow-[0_20px_50px_rgba(0,0,0,0.08)] text-[#3A2F2A] transition-all duration-300 hover:shadow-[0_24px_60px_rgba(0,0,0,0.12)]"
+            className="hidden sm:flex items-center justify-center w-10 h-10 rounded-full bg-[#F8F3EA] border border-[#C9A46C]/60 shadow-[0_20px_50px_rgba(0,0,0,0.08)] text-[#3A2F2A] transition-all duration-300 hover:shadow-[0_24px_60px_rgba(0,0,0,0.12)] absolute right-0 z-50 md:relative"
           >
             <span className="text-lg leading-none">›</span>
           </button>
@@ -241,57 +241,42 @@ export function Timeline() {
         </motion.div>
       </div>
 
-      <div className="max-w-[980px] mx-auto relative">
-        {/* Center line: desktop centered, mobile aligned with nodes */}
-        <div className="absolute left-[26px] md:left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-gold-1 to-gold-2 md:-translate-x-1/2" />
+      <div className="container mx-auto relative timeline">
+        {/* Center line: centered on both mobile and desktop */}
+        <div className="absolute left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-gold-1 to-gold-2 -translate-x-1/2 z-0" />
 
         {schedule.map((item, i) => {
           const isLeft = i % 2 === 0;
           return (
             <div
               key={i}
-              className="relative grid grid-cols-[52px_1fr] md:grid-cols-[1fr_72px_1fr] gap-4 md:gap-10 items-center mb-10 last:mb-0"
+              className="relative grid grid-cols-1 md:grid-cols-[1fr_72px_1fr] gap-4 md:gap-10 items-center justify-items-center md:justify-items-stretch mb-10 md:mb-10 last:mb-0"
             >
-              {/* Left card (desktop) / main card (mobile) */}
-              <div className={isLeft ? 'md:col-start-1' : 'md:col-start-1 md:opacity-0 md:pointer-events-none'}>
-                <motion.div
-                  initial={{ opacity: 0, y: 18 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-8%" }}
-                  transition={{ duration: 0.55, delay: i * 0.06 }}
-                  className="bg-white/40 backdrop-blur-md border border-white/20 p-4 md:p-5 rounded-lg shadow-lg"
-                >
-                  <div className="font-cinzel text-[0.56rem] tracking-[0.3em] uppercase text-gold-2 mb-1">{item.time}</div>
-                  <div className="font-im-fell text-[clamp(1rem,2.4vw,1.2rem)] text-ink-1">{item.ev}</div>
-                  <div className="font-cormorant italic text-[clamp(0.8rem,1.9vw,0.95rem)] text-ink-4 mt-1">{item.desc}</div>
-                </motion.div>
-              </div>
-
-              {/* Node */}
-              <div className="relative z-10 md:col-start-2 flex justify-center">
+              {/* Node (Mobile: centered on top, Desktop: Col 2) */}
+              <div className="relative z-10 row-start-1 md:col-start-2 flex justify-center">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.6 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true, margin: "-8%" }}
                   transition={{ duration: 0.45, delay: i * 0.06 }}
-                  className="w-[52px] h-[52px] rounded-full bg-white border-[1.5px] border-gold-1/40 flex items-center justify-center text-[1.2rem] shadow-[0_4px_18px_rgba(180,146,60,0.22),0_0_0_5px_rgba(212,175,106,0.08)]"
+                  className="w-[52px] h-[52px] md:w-[52px] md:h-[52px] rounded-full bg-white border-[1.5px] border-gold-1/40 flex items-center justify-center text-[1.2rem] shadow-[0_4px_18px_rgba(180,146,60,0.22),0_0_0_5px_rgba(212,175,106,0.08)]"
                 >
                   {item.icon}
                 </motion.div>
               </div>
 
-              {/* Right card (desktop) */}
-              <div className={!isLeft ? 'hidden md:block md:col-start-3' : 'hidden md:block md:col-start-3 md:opacity-0 md:pointer-events-none'}>
+              {/* Card Content */}
+              <div className={`row-start-2 w-full max-w-[480px] md:max-w-none md:row-start-1 ${isLeft ? 'md:col-start-1 md:text-right' : 'md:col-start-3'}`}>
                 <motion.div
                   initial={{ opacity: 0, y: 18 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-8%" }}
                   transition={{ duration: 0.55, delay: i * 0.06 }}
-                  className="bg-white/40 backdrop-blur-md border border-white/20 p-5 rounded-lg shadow-lg"
+                  className="bg-white/40 backdrop-blur-md border border-white/20 p-4 md:p-5 rounded-lg shadow-lg text-center md:text-left"
                 >
-                  <div className="font-cinzel text-[0.56rem] tracking-[0.3em] uppercase text-gold-2 mb-1">{item.time}</div>
-                  <div className="font-im-fell text-[clamp(1rem,2.4vw,1.2rem)] text-ink-1">{item.ev}</div>
-                  <div className="font-cormorant italic text-[clamp(0.8rem,1.9vw,0.95rem)] text-ink-4 mt-1">{item.desc}</div>
+                  <div className={`font-cinzel text-[0.56rem] tracking-[0.3em] uppercase text-gold-2 mb-1 ${isLeft ? 'md:text-right' : ''}`}>{item.time}</div>
+                  <div className={`font-im-fell text-[clamp(1rem,2.4vw,1.2rem)] text-ink-1 ${isLeft ? 'md:text-right' : ''}`}>{item.ev}</div>
+                  <div className={`font-cormorant italic text-[clamp(0.8rem,1.9vw,0.95rem)] text-ink-4 mt-1 ${isLeft ? 'md:text-right' : ''}`}>{item.desc}</div>
                 </motion.div>
               </div>
             </div>
@@ -314,13 +299,13 @@ export function Family() {
           <div className="w-[70px] h-[1px] bg-gradient-to-l from-transparent to-gold-1/45"></div>
         </motion.div>
       </div>
-      <div className="flex gap-[clamp(16px,4vw,52px)] justify-center flex-wrap max-w-[880px] mx-auto">
+      <div className="family-grid container">
         <motion.div
           initial={{ opacity: 0, x: -26 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: "-10%" }}
           transition={{ duration: 0.9 }}
-          className="flex-1 min-w-[min(260px,85vw)] bg-white/40 backdrop-blur-md border border-white/20 p-[clamp(2rem,5vw,3rem)] shadow-lg relative transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-[7px] hover:shadow-[0_22px_60px_rgba(140,106,30,0.14)]"
+          className="bg-white/40 backdrop-blur-md border border-white/20 p-[clamp(2rem,5vw,3rem)] shadow-lg relative transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-[7px] hover:shadow-[0_22px_60px_rgba(140,106,30,0.14)] w-full"
         >
           <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold-1 to-transparent"></div>
           <div className="font-im-fell text-[clamp(1.3rem,3.5vw,1.85rem)] text-ink-1 text-center mb-[3px]">Deverakonda Family</div>
@@ -336,7 +321,7 @@ export function Family() {
           </div>
         </motion.div>
 
-        <div className="flex flex-col items-center justify-center gap-2.5 self-center p-2">
+        <div className="hidden md:flex flex-col items-center justify-center gap-2.5 self-center p-2">
           <div className="w-[1px] h-[48px] bg-gradient-to-b from-transparent via-gold-1/30 to-transparent"></div>
           <div className="w-3 h-3 bg-gold-1 rotate-45 shadow-[0_0_12px_rgba(212,175,106,0.45)]"></div>
           <div className="w-[1px] h-[48px] bg-gradient-to-b from-transparent via-gold-1/30 to-transparent"></div>
@@ -347,7 +332,7 @@ export function Family() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: "-10%" }}
           transition={{ duration: 0.9 }}
-          className="flex-1 min-w-[min(260px,85vw)] bg-white/40 backdrop-blur-md border border-white/20 p-[clamp(2rem,5vw,3rem)] shadow-lg relative transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-[7px] hover:shadow-[0_22px_60px_rgba(140,106,30,0.14)]"
+          className="bg-white/40 backdrop-blur-md border border-white/20 p-[clamp(2rem,5vw,3rem)] shadow-lg relative transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-[7px] hover:shadow-[0_22px_60px_rgba(140,106,30,0.14)] w-full"
         >
           <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold-1 to-transparent"></div>
           <div className="font-im-fell text-[clamp(1.3rem,3.5vw,1.85rem)] text-ink-1 text-center mb-[3px]">Mandanna Family</div>

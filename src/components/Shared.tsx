@@ -259,6 +259,7 @@ export function Loader({ isLoading }: { isLoading: boolean }) {
 
 export function Navbar({ show }: { show: boolean }) {
   const [activeId, setActiveId] = useState('hero');
+  const [menuOpen, setMenuOpen] = useState(false);
   const rafRef = useRef<number | undefined>(undefined);
   const tickingRef = useRef(false);
 
@@ -291,6 +292,7 @@ export function Navbar({ show }: { show: boolean }) {
 
   const goTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    setMenuOpen(false);
   };
 
   const navItems = [
@@ -304,7 +306,7 @@ export function Navbar({ show }: { show: boolean }) {
 
   return (
     <nav
-      className="fixed top-0 left-0 right-0 h-[80px] flex items-center justify-center gap-[clamp(20px,5vw,64px)] bg-ivory/80 backdrop-blur-xl border-b border-gold-1/20 z-[8000] transition-all"
+      className="fixed top-0 left-0 right-0 h-[80px] flex items-center justify-between md:justify-center px-6 md:px-0 gap-[clamp(20px,5vw,64px)] bg-ivory/80 backdrop-blur-xl border-b border-gold-1/20 z-[8000] transition-all"
       style={{
         opacity: show ? 1 : 0,
         transitionDuration: '0.6s',
@@ -315,16 +317,32 @@ export function Navbar({ show }: { show: boolean }) {
         transform: show ? 'translateZ(0) translateY(0)' : 'translateZ(0) translateY(-20px)'
       }}
     >
-      {navItems.map(item => (
-        <span
-          key={item.id}
-          onClick={() => goTo(item.id)}
-          className={`font-cormorant italic text-[clamp(1.1rem,2vw,1.4rem)] tracking-wide cursor-pointer transition-all duration-300 whitespace-nowrap py-2 px-3 relative group ${activeId === item.id ? 'text-gold-3 drop-shadow-[0_0_8px_rgba(184,146,60,0.5)]' : 'text-ink-3 hover:text-gold-2 hover:drop-shadow-[0_0_8px_rgba(184,146,60,0.4)]'}`}
-        >
-          {item.label}
-          <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] bg-gradient-to-r from-transparent via-gold-2 to-transparent transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${activeId === item.id ? 'w-[80%] opacity-100' : 'w-0 opacity-0 group-hover:w-[80%] group-hover:opacity-100'}`}></span>
-        </span>
-      ))}
+      {/* Mobile Logo centered absolute */}
+      <div className="md:hidden absolute left-1/2 -translate-x-1/2 font-im-fell text-[clamp(1.5rem,4vw,2rem)] text-ink-1 font-bold tracking-wider">V & R</div>
+
+      {/* Hamburger Icon */}
+      <button
+        className="md:hidden flex flex-col justify-center items-center gap-1.5 w-8 h-8 z-[8001] ml-auto"
+        onClick={() => setMenuOpen(!menuOpen)}
+      >
+        <span className={`block w-6 h-0.5 bg-ink-1 transition-transform ${menuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
+        <span className={`block w-6 h-0.5 bg-ink-1 transition-opacity ${menuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+        <span className={`block w-6 h-0.5 bg-ink-1 transition-transform ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
+      </button>
+
+      {/* Nav Links */}
+      <div className={`absolute md:relative top-[80px] md:top-0 left-0 right-0 bg-ivory/95 md:bg-transparent flex flex-col md:flex-row items-center justify-center gap-6 md:gap-[clamp(20px,5vw,64px)] py-6 md:py-0 transition-all duration-300 md:opacity-100 md:translate-y-0 md:h-auto overflow-hidden ${menuOpen ? 'opacity-100 translate-y-0 h-auto border-b border-gold-1/20' : 'opacity-0 -translate-y-[150%] h-0 md:h-auto border-none'}`}>
+        {navItems.map(item => (
+          <span
+            key={item.id}
+            onClick={() => goTo(item.id)}
+            className={`font-cormorant italic text-[clamp(1.5rem,2vw,1.4rem)] md:text-[clamp(1.1rem,2vw,1.4rem)] tracking-wide cursor-pointer transition-all duration-300 whitespace-nowrap py-2 px-3 relative group ${activeId === item.id ? 'text-gold-3 drop-shadow-[0_0_8px_rgba(184,146,60,0.5)]' : 'text-ink-3 hover:text-gold-2 hover:drop-shadow-[0_0_8px_rgba(184,146,60,0.4)]'}`}
+          >
+            {item.label}
+            <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] bg-gradient-to-r from-transparent via-gold-2 to-transparent transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${activeId === item.id ? 'w-[80%] opacity-100' : 'w-0 opacity-0 group-hover:w-[80%] group-hover:opacity-100'}`}></span>
+          </span>
+        ))}
+      </div>
     </nav>
   );
 }

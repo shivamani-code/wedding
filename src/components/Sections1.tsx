@@ -39,7 +39,7 @@ export function Hero({ show = true }: { show?: boolean }) {
   };
 
   return (
-    <section ref={heroRef} id="hero" className="min-h-screen relative overflow-hidden flex items-center justify-center bg-gradient-to-br from-[#FDFAF3] via-[#F6EDD8] to-[#EDD9B4] pt-[58px]">
+    <section ref={heroRef} id="hero" className="hero relative overflow-hidden flex items-center justify-center bg-gradient-to-br from-[#FDFAF3] via-[#F6EDD8] to-[#EDD9B4] pt-[58px]">
 
       {/* Background Pattern & Vignette */}
       <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/floral-pattern.png')] opacity-10 mix-blend-overlay pointer-events-none"></div>
@@ -151,7 +151,7 @@ export function Hero({ show = true }: { show?: boolean }) {
       {/* Main Content */}
       <div className="relative z-10 flex items-center justify-center w-full max-w-[1200px] px-4 md:px-12 h-full">
 
-        {/* Groom Character */}
+        {/* Groom Character (Desktop) */}
         <motion.div
           initial={{ opacity: 0, x: -80, rotate: 4, z: 0 }}
           animate={show ? { opacity: 1, x: 0, rotate: 4, z: 0 } : { opacity: 0, x: -80, rotate: 4, z: 0 }}
@@ -160,7 +160,7 @@ export function Hero({ show = true }: { show?: boolean }) {
             delay: 0.4,
             ease: [0.22, 1, 0.36, 1]
           }}
-          className="absolute left-4 md:left-0 w-[28vw] md:w-[22vw] max-w-[280px] aspect-[3/4] rounded-t-full overflow-hidden border-2 md:border-4 border-white/60 shadow-2xl origin-bottom-right z-0 md:z-10"
+          className="hidden md:block absolute left-4 md:left-0 w-[28vw] md:w-[22vw] max-w-[280px] aspect-[3/4] rounded-t-full overflow-hidden border-2 md:border-4 border-white/60 shadow-2xl origin-bottom-right z-0 md:z-10"
           style={{ willChange: 'transform, opacity', backfaceVisibility: 'hidden' }}
         >
           <div className="w-full h-full opacity-40 md:opacity-100">
@@ -194,8 +194,15 @@ export function Hero({ show = true }: { show?: boolean }) {
             The Wedding Of
           </motion.p>
 
+          <div className="md:hidden w-full z-30 relative">
+            <div className="portrait-row">
+              <img src={groomImg} alt="Groom" className="portrait" referrerPolicy="no-referrer" />
+              <img src={brideImg} alt="Bride" className="portrait" referrerPolicy="no-referrer" />
+            </div>
+          </div>
+
           <motion.h1
-            className="font-im-fell text-4xl md:text-6xl lg:text-8xl text-ink-1 mb-6 text-center relative leading-[1.1]"
+            className="couple-names md:text-6xl lg:text-8xl md:mb-6 font-im-fell text-ink-1 text-center relative leading-[1.1] z-30"
             variants={container}
             initial="hidden"
             animate={show ? "visible" : "hidden"}
@@ -208,11 +215,11 @@ export function Hero({ show = true }: { show?: boolean }) {
             initial={{ opacity: 0, y: 10, z: 0 }}
             animate={show ? { opacity: 1, y: 0, z: 0 } : { opacity: 0, y: 10, z: 0 }}
             transition={{ duration: 0.8, delay: 1.0, ease: [0.22, 1, 0.36, 1] }}
-            className="flex items-center gap-4 relative"
+            className="flex items-center justify-center gap-4 relative z-30 w-full"
             style={{ willChange: 'transform, opacity', backfaceVisibility: 'hidden' }}
           >
             <div className="w-8 md:w-16 h-[1px] bg-gold-1/60"></div>
-            <span className="font-cormorant italic text-xl md:text-2xl text-ink-2 whitespace-nowrap">15 December 2026</span>
+            <span className="wedding-date font-cormorant italic text-ink-2 whitespace-nowrap">15 December 2026</span>
             <div className="w-8 md:w-16 h-[1px] bg-gold-1/60"></div>
           </motion.div>
         </div>
@@ -226,7 +233,7 @@ export function Hero({ show = true }: { show?: boolean }) {
             delay: 0.6,
             ease: [0.22, 1, 0.36, 1]
           }}
-          className="absolute right-4 md:right-0 w-[28vw] md:w-[22vw] max-w-[280px] aspect-[3/4] rounded-t-full overflow-hidden border-2 md:border-4 border-white/60 shadow-2xl origin-bottom-left z-0 md:z-10"
+          className="hidden md:block absolute right-4 md:right-0 w-[28vw] md:w-[22vw] max-w-[280px] aspect-[3/4] rounded-t-full overflow-hidden border-2 md:border-4 border-white/60 shadow-2xl origin-bottom-left z-0 md:z-10"
           style={{ willChange: 'transform, opacity', backfaceVisibility: 'hidden' }}
         >
           <div className="w-full h-full opacity-40 md:opacity-100">
